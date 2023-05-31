@@ -1,4 +1,4 @@
-from .pdfExtractor import *
+from .pdfExtractor import pdfExtractor
 
 from threading import Thread
 
