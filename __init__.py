@@ -1,1 +1,1 @@
-from .pypdfReader import *
+from .pyPDFReader import *
