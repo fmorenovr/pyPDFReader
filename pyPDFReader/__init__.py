@@ -1,5 +1,4 @@
 from .pdfExtractor import *
-from .token import generateToken, isToken
 
 from threading import Thread
 
