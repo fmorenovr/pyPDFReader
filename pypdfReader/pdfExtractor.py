@@ -7,7 +7,6 @@ except ImportError:
 import pytesseract
 
 from pdf2image import convert_from_path
-from py.utils.file_functions import verifyDir
 
 import io
 import fitz
