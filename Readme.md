@@ -25,9 +25,26 @@ or
     pip list --format=freeze > requirements.txt
 ```
 
-**3) Using as git submodule**
+
+### Add submodule
 
 ```
-git submodule add -b main https://github.com/fmorenovr/pyPDFReader.git path_to_install/pyPDFReader
+git submodule add -b main https://github.com/fmorenovr/pypdfReader.git path_to_install/pypdfReader
 git submodule update --remote
+```
+
+### Delete submodule
+
+* First, remove local directories:
+```
+git rm --cached path_to_submodule
+rm -rf path_to_submodule
+```
+
+* Then, remove it in files `.gitsubmodules` and `.git/config`.
+
+* Finally, remove it from git:
+
+```
+rm -rf .git/modules/path_to_submodule
 ```
