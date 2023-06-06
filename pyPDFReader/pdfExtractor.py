@@ -22,11 +22,26 @@ from pdfminer.pdfpage import PDFPage
 #from py.nlpToolkit.nlpToolkit.language_processing import LanguageProcesser
 
 class pdfExtractor:
-    def __init__(self, pdf_path=None, set_page_limiter=False, language="portuguese", TMP_OUT_PATH=None, language_processer=None):
+    def __init__(self, pdf_path=None, 
+                       set_page_limiter=False, 
+                       language="portuguese", 
+                       TMP_OUT_PATH=None, 
+                       language_processer=None, 
+                       no_margin = True,
+                       margin_left = 1.2, 
+                       margin_top = 2, 
+                       margin_right = 1.2, 
+                       margin_bot = 2):
+                       
         self.pdf_path = pdf_path
         self.set_page_limiter = set_page_limiter
         self.language = language
         self.TMP_OUT_PATH=TMP_OUT_PATH
+        
+        self.margin_left = margin_left
+        self.margin_top = margin_top
+        self.margin_right = margin_right
+        self.margin_bot = margin_bot
         
         #self.language_processer = LanguageProcesser(languages_to_eval=self.language)
         self.language_processer = language_processer
@@ -164,7 +179,7 @@ class pdfExtractor:
         
         return content, num_pages, opened
         
-    def pymupdf_extractText(self, pdf_path):
+    def pymupdf_extractText(self, pdf_path, scaler=28.35):
         pdf_name = (pdf_path.split("/")[-1]).split(".pdf")[0]
         content = ''
         num_pages=0
@@ -176,10 +191,25 @@ class pdfExtractor:
               num_pages = len(pdf)
               cur_page=0
               for page in pdf:
-                if self.set_page_limiter:
-                  text_ = page.get_text() + "\nENDOFPAGE\n"
+                
+                if not no_margin:
+                    w = page.rect.width
+                    h = page.rect.height
+                    y1 = self.margin_top*scaler
+                    x1 = self.margin_left*scaler
+                    x2 = w - self.margin_right*scaler
+                    y2 = h - self.margin_bot*scaler
+                    
+                    current_rect = fitz.Rect(x1, y1, x2, y2)
+                    block_content = page.get_text("blocks", clip=current_rect)
+                    page_content = "\n".join(b[4] for b in block_content) + "\n"
                 else:
-                  text_ = page.get_text() + "\n\n"
+                    page_content = page.get_text()
+              
+                if self.set_page_limiter:
+                  text_ = page_content + "\nENDOFPAGE\n"
+                else:
+                  text_ = page_content + "\n\n"
                   
                 content += text_
 
