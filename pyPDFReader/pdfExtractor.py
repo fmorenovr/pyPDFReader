@@ -27,6 +27,7 @@ class pdfExtractor:
                        language="portuguese", 
                        TMP_OUT_PATH=None, 
                        language_processer=None, 
+                       acceptable_ratio = 0.65,
                        no_margin = True,
                        margin_left = 1.2, 
                        margin_top = 2, 
@@ -37,6 +38,8 @@ class pdfExtractor:
         self.set_page_limiter = set_page_limiter
         self.language = language
         self.TMP_OUT_PATH=TMP_OUT_PATH
+        
+        self.acceptable_ratio = acceptable_ratio
         
         self.no_margin = no_margin
         self.margin_left = margin_left
@@ -59,7 +62,7 @@ class pdfExtractor:
         logging.info(f"PyMuPDF correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
         logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
         
-        if num_pages>0 and opened and self.language_ratio >= 0.65:
+        if num_pages>0 and opened and self.language_ratio >= self.acceptable_ratio and len(content)>0:
             logging.info("PyMuPDF should be used")
             return content, "PYMU"
 
@@ -73,9 +76,11 @@ class pdfExtractor:
             logging.info(f"PyMuPDF ratio: {self.language_ratio}")
             logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
         
-            if num_pages>0 and opened and self.language_ratio >= 0.65:
+            if num_pages>0 and opened and self.language_ratio >= self.acceptable_ratio and len(content)>0:
                 logging.info("PyMuPDF used")
                 return content, "PYMU"
+            else:
+                None, None
         else:
             content, num_pages, opened = self.ocr_extractText(pdf_path)
             self.verifyLanguage(content)
@@ -95,7 +100,7 @@ class pdfExtractor:
         logging.info(f"PyMuPDF ratio: {self.language_ratio}")
         logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
         
-        if num_pages>0 and opened and self.language_ratio >= 0.65:
+        if num_pages>0 and opened and self.language_ratio >= self.acceptable_ratio and len(content)>0:
             logging.info("PyMuPDF used")
             return content, "PYMU"
         else:
@@ -203,7 +208,7 @@ class pdfExtractor:
                     
                     current_rect = fitz.Rect(x1, y1, x2, y2)
                     block_content = page.get_text("blocks", clip=current_rect)
-                    page_content = "\n".join(b[4] for b in block_content) + "\n"
+                    page_content = "\n".join(b[4] for b in block_content)
                 else:
                     page_content = page.get_text()
               
