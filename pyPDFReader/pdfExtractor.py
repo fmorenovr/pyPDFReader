@@ -38,6 +38,7 @@ class pdfExtractor:
         self.language = language
         self.TMP_OUT_PATH=TMP_OUT_PATH
         
+        self.no_margin = no_margin
         self.margin_left = margin_left
         self.margin_top = margin_top
         self.margin_right = margin_right
@@ -192,7 +193,7 @@ class pdfExtractor:
               cur_page=0
               for page in pdf:
                 
-                if not no_margin:
+                if not self.no_margin:
                     w = page.rect.width
                     h = page.rect.height
                     y1 = self.margin_top*scaler
