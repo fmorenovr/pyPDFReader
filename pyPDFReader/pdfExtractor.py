@@ -222,10 +222,10 @@ class pdfExtractor:
                 
                 if not self.no_margin:
                     
-                    dpi_x = page.x_dpi
-                    dpi_y = page.y_dpi
+                    dpi_x = 72
+                    dpi_y = 72
                     
-                    width, height = page.MediaBoxSize
+                    width, height = page.rect.width, page.rect.height
                 
                     x1 = int( self.margin_left*dpi_x/self.page_scaler )
                     y1 = int( self.margin_top*dpi_y/self.page_scaler )
