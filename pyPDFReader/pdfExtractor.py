@@ -28,6 +28,7 @@ class pdfExtractor:
                        TMP_OUT_PATH=None, 
                        language_processer=None, 
                        acceptable_ratio = 0.65,
+                       page_scaler=2.54,
                        no_margin = True,
                        margin_left = 1.2, 
                        margin_top = 2, 
@@ -40,6 +41,7 @@ class pdfExtractor:
         self.TMP_OUT_PATH=TMP_OUT_PATH
         
         self.acceptable_ratio = acceptable_ratio
+        self.page_scaler = page_scaler
         
         self.no_margin = no_margin
         self.margin_left = margin_left
@@ -162,18 +164,38 @@ class pdfExtractor:
         
         try:
             logging.info("Using OCR")
-            images = convert_from_path(pdf_path)
+            pdf_images = convert_from_path(pdf_path)
             num_pages = len(images)
         
-            for i in range(num_pages):
+            for current_image in pdf_images:
+            
+                if not self.no_margin:
+                
+                    dpi_x = 72
+                    dpi_y = 72
+                
+                    width, height = current_image.size
+                    
+                    x1 = int( self.margin_left*dpi_x/self.page_scaler )
+                    y1 = int( self.margin_top*dpi_y/self.page_scaler )
+                    
+                    x2 = width - int( self.margin_right*dpi_x/self.page_scaler )
+                    y2 = height - int( self.margin_bot*dpi_y/self.page_scaler )
+
+                    cropped_image = current_image.crop((x1, y1, x2, y2))
                 #images[i].save(f'{path_to_save}{pdf_name}_page_{str(i)}.jpg', 'JPEG')
                 # Optical Character Recognition
-                if self.set_page_limiter:
-                    text_ = pytesseract.image_to_string(images[i], lang="por") + "\nENDOFPAGE\n"
+                    page_content = pytesseract.image_to_string(cropped_image, lang="por")
                 else:
-                    text_ = pytesseract.image_to_string(images[i], lang="por") + "\n\n"
+                    page_content = pytesseract.image_to_string(current_image, lang="por")
+                
+                if self.set_page_limiter:
+                  text_ = page_content + "\nENDOFPAGE\n"
+                else:
+                  text_ = page_content + "\n\n"
                 
                 content += text_
+                content = content.strip("\n")
 
             opened = True
         
@@ -185,7 +207,7 @@ class pdfExtractor:
         
         return content, num_pages, opened
         
-    def pymupdf_extractText(self, pdf_path, scaler=28.35):
+    def pymupdf_extractText(self, pdf_path):
         pdf_name = (pdf_path.split("/")[-1]).split(".pdf")[0]
         content = ''
         num_pages=0
@@ -199,12 +221,17 @@ class pdfExtractor:
               for page in pdf:
                 
                 if not self.no_margin:
-                    w = page.rect.width
-                    h = page.rect.height
-                    y1 = self.margin_top*scaler
-                    x1 = self.margin_left*scaler
-                    x2 = w - self.margin_right*scaler
-                    y2 = h - self.margin_bot*scaler
+                    
+                    dpi_x = page.x_dpi
+                    dpi_y = page.y_dpi
+                    
+                    width, height = page.MediaBoxSize
+                
+                    x1 = int( self.margin_left*dpi_x/self.page_scaler )
+                    y1 = int( self.margin_top*dpi_y/self.page_scaler )
+                    
+                    x2 = width - int( self.margin_right*dpi_x/self.page_scaler )
+                    y2 = height - int( self.margin_bot*dpi_y/self.page_scaler )
                     
                     current_rect = fitz.Rect(x1, y1, x2, y2)
                     block_content = page.get_text("blocks", clip=current_rect)
@@ -218,6 +245,7 @@ class pdfExtractor:
                   text_ = page_content + "\n\n"
                   
                 content += text_
+                content = content.strip("\n")
 
             opened = True
           
