@@ -126,7 +126,7 @@ class pdfExtractor:
     def get_incorrect_words(self): 
         return self.incorrect_words
     
-    def verifyLanguage(self, content, ratio=0.9):
+    def verifyLanguage(self, content):
         
         if self.language_processer is not None:
         
