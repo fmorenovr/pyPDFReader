@@ -165,7 +165,7 @@ class pdfExtractor:
         try:
             logging.info("Using OCR")
             pdf_images = convert_from_path(pdf_path)
-            num_pages = len(images)
+            num_pages = len(pdf_images)
         
             for current_image in pdf_images:
             
@@ -183,7 +183,7 @@ class pdfExtractor:
                     y2 = height - int( self.margin_bot*dpi_y/self.page_scaler )
 
                     cropped_image = current_image.crop((x1, y1, x2, y2))
-                #images[i].save(f'{path_to_save}{pdf_name}_page_{str(i)}.jpg', 'JPEG')
+                #pdf_images[i].save(f'{path_to_save}{pdf_name}_page_{str(i)}.jpg', 'JPEG')
                 # Optical Character Recognition
                     page_content = pytesseract.image_to_string(cropped_image, lang="por")
                 else:
