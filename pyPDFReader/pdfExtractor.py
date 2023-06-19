@@ -29,7 +29,7 @@ class pdfExtractor:
                        language_processer=None, 
                        acceptable_ratio = 0.65,
                        page_scaler=2.54,
-                       no_margin = True,
+                       apply_margin = False,
                        margin_left = 1.2, 
                        margin_top = 2, 
                        margin_right = 1.2, 
@@ -43,7 +43,7 @@ class pdfExtractor:
         self.acceptable_ratio = acceptable_ratio
         self.page_scaler = page_scaler
         
-        self.no_margin = no_margin
+        self.apply_margin = apply_margin
         self.margin_left = margin_left
         self.margin_top = margin_top
         self.margin_right = margin_right
@@ -169,7 +169,7 @@ class pdfExtractor:
         
             for current_image in pdf_images:
             
-                if not self.no_margin:
+                if self.apply_margin:
                 
                     dpi_x = 72
                     dpi_y = 72
@@ -220,7 +220,7 @@ class pdfExtractor:
               cur_page=0
               for page in pdf:
                 
-                if not self.no_margin:
+                if self.apply_margin:
                     
                     dpi_x = 72
                     dpi_y = 72
