@@ -192,7 +192,7 @@ class pdfExtractor:
                 if self.set_page_limiter:
                   text_ = page_content + "\nENDOFPAGE\n"
                 else:
-                  text_ = page_content + "\n\n"
+                  text_ = page_content + "\n"
                 
                 content += text_
                 content = content.strip("\n")
@@ -242,7 +242,7 @@ class pdfExtractor:
                 if self.set_page_limiter:
                   text_ = page_content + "\nENDOFPAGE\n"
                 else:
-                  text_ = page_content + "\n\n"
+                  text_ = page_content + "\n"
                   
                 content += text_
                 content = content.strip("\n")
@@ -271,7 +271,7 @@ class pdfExtractor:
               if self.set_page_limiter:
                 text_ = pdf.pages[cur_page].extract_text() + "\nENDOFPAGE\n"
               else:
-                text_ = pdf.pages[cur_page].extract_text() + "\n\n"
+                text_ = pdf.pages[cur_page].extract_text() + "\n"
               content += text_
               cur_page = cur_page+1
 
