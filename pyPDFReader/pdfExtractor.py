@@ -64,7 +64,7 @@ class pdfExtractor:
         logging.info(f"PyMuPDF ratio: {self.language_ratio}")
         logging.info(f"PyMuPDF correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
         logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
-        
+      
         if num_pages>0 and opened and self.language_ratio >= self.acceptable_ratio and len(content)>0:
             logging.info("PyMuPDF should be used")
             return content, "PYMU"
@@ -78,6 +78,7 @@ class pdfExtractor:
             self.verifyLanguage(content)
             logging.info(f"PyMuPDF Total words: {self.total_words}")
             logging.info(f"PyMuPDF ratio: {self.language_ratio}")
+            logging.info(f"PyMuPDF correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
             logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
         
             if num_pages>0 and opened and self.language_ratio >= self.acceptable_ratio and len(content)>0:
@@ -102,7 +103,9 @@ class pdfExtractor:
     def pdf_eval_and_extractText(self, pdf_path):
         content, num_pages, opened = self.pymupdf_extractText(pdf_path)
         self.verifyLanguage(content)
+        logging.info(f"PyMuPDF Total words: {self.total_words}")
         logging.info(f"PyMuPDF ratio: {self.language_ratio}")
+        logging.info(f"PyMuPDF correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
         logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
         
         if num_pages>0 and opened and self.language_ratio >= self.acceptable_ratio and len(content)>0:
@@ -111,6 +114,7 @@ class pdfExtractor:
         else:
             content, num_pages, opened = self.ocr_extractText(pdf_path)
             self.verifyLanguage(content)
+            logging.info(f"OCR Total words: {self.total_words}")
             logging.info(f"OCR ratio: {self.language_ratio}")
             logging.info(f"OCR correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
             logging.info(f"OCR incorrect words: {self.incorrect_words}")
