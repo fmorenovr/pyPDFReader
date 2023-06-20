@@ -60,6 +60,7 @@ class pdfExtractor:
     def pdf_evaluate(self, pdf_path):
         content, num_pages, opened = self.pymupdf_extractText(pdf_path)
         self.verifyLanguage(content)
+        logging.info(f"PyMuPDF Total words: {self.total_words}")
         logging.info(f"PyMuPDF ratio: {self.language_ratio}")
         logging.info(f"PyMuPDF correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
         logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
@@ -75,6 +76,7 @@ class pdfExtractor:
         if method == "PYMU":
             content, num_pages, opened = self.pymupdf_extractText(pdf_path)
             self.verifyLanguage(content)
+            logging.info(f"PyMuPDF Total words: {self.total_words}")
             logging.info(f"PyMuPDF ratio: {self.language_ratio}")
             logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
         
@@ -86,6 +88,7 @@ class pdfExtractor:
         else:
             content, num_pages, opened = self.ocr_extractText(pdf_path)
             self.verifyLanguage(content)
+            logging.info(f"OCR Total words: {self.total_words}")
             logging.info(f"OCR ratio: {self.language_ratio}")
             logging.info(f"OCR correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
             logging.info(f"OCR incorrect words: {self.incorrect_words}")
@@ -136,12 +139,14 @@ class pdfExtractor:
             self.correct_words = self.language_processer.get_correct_words()
             self.incorrect_words = self.language_processer.get_incorrect_words()
             self.language_ratio = self.pt_ratio[self.language]
+            self.total_words = self.language_processer.get_all_words()
         
         else:
             self.pt_ratio = None
             self.correct_words = None
             self.incorrect_words = None
             self.language_ratio = None
+            self.total_words = None
 
     def pdf_to_img(self, pdf_path):
         pdf_name = (pdf_path.split("/")[-1]).split(".pdf")[0]
