@@ -60,7 +60,7 @@ class pdfExtractor:
     def pdf_evaluate(self, pdf_path):
         content, num_pages, num_images, opened = self.pymupdf_extractText(pdf_path)
         self.verifyLanguage(content)
-        logging.info(f"PyMuPDF Total words: {self.total_words}")
+        logging.info(f"PyMuPDF Total words: {len(self.total_words)}")
         logging.info(f"PyMuPDF ratio: {self.language_ratio}")
         logging.info(f"PyMuPDF correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
         logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
@@ -76,7 +76,7 @@ class pdfExtractor:
         if method == "PYMU":
             content, num_pages, num_images, opened = self.pymupdf_extractText(pdf_path)
             self.verifyLanguage(content)
-            logging.info(f"PyMuPDF Total words: {self.total_words}")
+            logging.info(f"PyMuPDF Total words: {len(self.total_words)}")
             logging.info(f"PyMuPDF ratio: {self.language_ratio}")
             logging.info(f"PyMuPDF correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
             logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
@@ -89,7 +89,7 @@ class pdfExtractor:
         else:
             content, num_pages, num_images, opened = self.ocr_extractText(pdf_path)
             self.verifyLanguage(content)
-            logging.info(f"OCR Total words: {self.total_words}")
+            logging.info(f"OCR Total words: {len(self.total_words)}")
             logging.info(f"OCR ratio: {self.language_ratio}")
             logging.info(f"OCR correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
             logging.info(f"OCR incorrect words: {self.incorrect_words}")
@@ -103,7 +103,7 @@ class pdfExtractor:
     def pdf_eval_and_extractText(self, pdf_path):
         content, num_pages, num_images, opened = self.pymupdf_extractText(pdf_path)
         self.verifyLanguage(content)
-        logging.info(f"PyMuPDF Total words: {self.total_words}")
+        logging.info(f"PyMuPDF Total words: {len(self.total_words)}")
         logging.info(f"PyMuPDF ratio: {self.language_ratio}")
         logging.info(f"PyMuPDF correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
         logging.info(f"PyMuPDF incorrect words: {self.incorrect_words}")
@@ -114,7 +114,7 @@ class pdfExtractor:
         else:
             content, num_pages, num_images, opened = self.ocr_extractText(pdf_path)
             self.verifyLanguage(content)
-            logging.info(f"OCR Total words: {self.total_words}")
+            logging.info(f"OCR Total words: {len(self.total_words)}")
             logging.info(f"OCR ratio: {self.language_ratio}")
             logging.info(f"OCR correct-incorrect words: {len(self.correct_words)}-{len(self.incorrect_words)}")
             logging.info(f"OCR incorrect words: {self.incorrect_words}")
