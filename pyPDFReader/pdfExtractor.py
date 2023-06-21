@@ -58,7 +58,7 @@ class pdfExtractor:
         self.pdf_path = pdf_path
     
     def pdf_evaluate(self, pdf_path):
-        content, num_pages, opened = self.pymupdf_extractText(pdf_path)
+        content, num_pages, num_images, opened = self.pymupdf_extractText(pdf_path)
         self.verifyLanguage(content)
         logging.info(f"PyMuPDF Total words: {self.total_words}")
         logging.info(f"PyMuPDF ratio: {self.language_ratio}")
@@ -74,7 +74,7 @@ class pdfExtractor:
         
     def pdf_extractText(self, pdf_path, method="PYMU"):
         if method == "PYMU":
-            content, num_pages, opened = self.pymupdf_extractText(pdf_path)
+            content, num_pages, num_images, opened = self.pymupdf_extractText(pdf_path)
             self.verifyLanguage(content)
             logging.info(f"PyMuPDF Total words: {self.total_words}")
             logging.info(f"PyMuPDF ratio: {self.language_ratio}")
@@ -87,7 +87,7 @@ class pdfExtractor:
             else:
                 None, None
         else:
-            content, num_pages, opened = self.ocr_extractText(pdf_path)
+            content, num_pages, num_images, opened = self.ocr_extractText(pdf_path)
             self.verifyLanguage(content)
             logging.info(f"OCR Total words: {self.total_words}")
             logging.info(f"OCR ratio: {self.language_ratio}")
@@ -101,7 +101,7 @@ class pdfExtractor:
         return None, None
     
     def pdf_eval_and_extractText(self, pdf_path):
-        content, num_pages, opened = self.pymupdf_extractText(pdf_path)
+        content, num_pages, num_images, opened = self.pymupdf_extractText(pdf_path)
         self.verifyLanguage(content)
         logging.info(f"PyMuPDF Total words: {self.total_words}")
         logging.info(f"PyMuPDF ratio: {self.language_ratio}")
@@ -112,7 +112,7 @@ class pdfExtractor:
             logging.info("PyMuPDF used")
             return content, "PYMU"
         else:
-            content, num_pages, opened = self.ocr_extractText(pdf_path)
+            content, num_pages, num_images, opened = self.ocr_extractText(pdf_path)
             self.verifyLanguage(content)
             logging.info(f"OCR Total words: {self.total_words}")
             logging.info(f"OCR ratio: {self.language_ratio}")
@@ -169,6 +169,7 @@ class pdfExtractor:
         pdf_name = (pdf_path.split("/")[-1]).split(".pdf")[0]
         content = ''
         num_pages=0
+        num_images=0
         opened = False
         
         try:
@@ -203,6 +204,9 @@ class pdfExtractor:
                 else:
                   text_ = page_content + "\n"
                 
+                if len(page_content)==0:
+                  num_images+=1
+                
                 content += text_
                 content = content.strip("\n")
 
@@ -213,13 +217,15 @@ class pdfExtractor:
             opened = False
             content = ''
             num_pages=0
+            num_images=0
         
-        return content, num_pages, opened
+        return content, num_pages, num_images, opened
         
     def pymupdf_extractText(self, pdf_path):
         pdf_name = (pdf_path.split("/")[-1]).split(".pdf")[0]
         content = ''
         num_pages=0
+        num_images=0
         opened = False
         
         try:
@@ -248,6 +254,9 @@ class pdfExtractor:
                 else:
                     page_content = page.get_text()
               
+                if len(page_content)==0:
+                  num_images+=1
+              
                 if self.set_page_limiter:
                   text_ = page_content + "\nENDOFPAGE\n"
                 else:
@@ -263,8 +272,9 @@ class pdfExtractor:
             opened = False
             content = ''
             num_pages=0
+            num_images=0
           
-        return content, num_pages, opened
+        return content, num_pages, num_images, opened
    
     def pdfplumber_extract_txt(self, pdf_path):
         pdf_name = (pdf_path.split("/")[-1]).split(".pdf")[0]
