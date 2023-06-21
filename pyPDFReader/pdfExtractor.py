@@ -204,7 +204,7 @@ class pdfExtractor:
                 else:
                   text_ = page_content + "\n"
                 
-                if len(page_content)==0:
+                if len(page_content.strip())==0:
                   num_images+=1
                 
                 content += text_
@@ -254,7 +254,7 @@ class pdfExtractor:
                 else:
                     page_content = page.get_text()
               
-                if len(page_content)==0:
+                if len(page_content.strip())==0:
                   num_images+=1
               
                 if self.set_page_limiter:
