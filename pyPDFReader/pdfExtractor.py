@@ -10,14 +10,9 @@ from pdf2image import convert_from_path
 
 import io
 import fitz
-import pdfplumber
 
 import logging
 
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfpage import PDFPage
 
 #from py.nlpToolkit.nlpToolkit.language_processing import LanguageProcesser
 
@@ -292,6 +287,9 @@ class pdfExtractor:
         return content, num_pages, num_images, opened
    
     def pdfplumber_extract_txt(self, pdf_path):
+        
+        import pdfplumber
+        
         pdf_name = (pdf_path.split("/")[-1]).split(".pdf")[0]
         content = ''
         num_pages=0
@@ -320,6 +318,13 @@ class pdfExtractor:
         return content, num_pages, opened
     
     def pdfminer_extractText(path, to_save=True, path_to_save="../../data/STF/CSV/", set_page_limiter=False):
+        
+        
+        from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+        from pdfminer.converter import TextConverter
+        from pdfminer.layout import LAParams
+        from pdfminer.pdfpage import PDFPage
+        
         rsrcmgr = PDFResourceManager()
         retstr = io.StringIO()
         codec = 'utf-8'
