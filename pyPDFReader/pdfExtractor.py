@@ -84,7 +84,7 @@ class pdfExtractor:
         
             if num_pages>0 and opened and self.language_ratio >= self.acceptable_ratio and len(content)>0 and len(self.total_words)/num_pages>self.words_pages_acceptable_ratio:
                 logging.info("PyMuPDF used")
-                return content, "PYMU"
+                return [content, num_pages, num_images, opened], "PYMU"
             else:
                 None, None
         else:
@@ -99,7 +99,7 @@ class pdfExtractor:
             
             #if num_pages>0 and opened and self.language_ratio >= 0.6:
             logging.info("OCR used")
-            return content, "OCR"
+            return [content, num_pages, num_images, opened], "OCR"
         
         return None, None
     
