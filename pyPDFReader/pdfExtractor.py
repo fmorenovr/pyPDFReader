@@ -71,7 +71,7 @@ class pdfExtractor:
         logging.info("OCR should be used")         
         return content, "OCR"
         
-    def pdf_extractText(self, pdf_path, method="PYMU"):
+    def extract_text(self, pdf_path, method="PYMU"):
         if method == "PYMU":
             content, num_pages, num_images, opened = self.pymupdf_extractText(pdf_path)
             self.verifyLanguage(content)
